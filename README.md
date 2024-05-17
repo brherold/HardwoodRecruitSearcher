@@ -7,6 +7,6 @@ Search by Parameters: Users can input various parameters such as position, heigh
 
 Dynamic Filtering: The application dynamically updates search results as users adjust their search parameters, providing real-time feedback.
 
-Recruit Profiles: Detailed profiles for each recruit, showcasing their vital stats, skills, achievements, and contact information if available.
+Recruit Profiles: Detailed profiles for each recruit, showcasing their stats and skills.
 
 For: http://onlinecollegebasketball.org/

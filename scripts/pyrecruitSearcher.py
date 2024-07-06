@@ -145,6 +145,13 @@ FarHome = {"Good": {"Has no preference"}, "Bad": {}}
 
 recruited = input("Is Recruited?: (Y,N)")  # gets if player is recruited or not
 
+
+#Asks for Deve Difference
+
+developmentDiff = int(input("Minimum Developmment: "))
+
+
+
 preferenceArr = [
     int(input("Minimum Potential: ")),
     int(input("Minimum SI: ")),
@@ -162,9 +169,10 @@ preferenceArr = [
     input("FarHome: ")
 ]
 
-#Finds the links of every player with atleast minPot and minSI
+#Finds the links of every player with the minimum inputted Potential and SI values
 
 if recruited == "Y":
+    #Includes Recruited players
     playerLinks = [
         hardwoodBeginnerUrl +
         infoList[i].find_all("td")[2].find("a").get("href")
@@ -172,8 +180,9 @@ if recruited == "Y":
         if (int(infoList[i].find_all("td")[7].text) >= preferenceArr[0]) and (
             int(infoList[i].find_all("td")[6].text) >= preferenceArr[1])
     ]
-    #print("0")
+    
 else:
+    #Excludes Recruited Plauers
     playerLinks = [
         hardwoodBeginnerUrl +
         infoList[i].find_all("td")[2].find("a").get("href")
@@ -182,8 +191,9 @@ else:
             int(infoList[i].find_all("td")[6].text) >= preferenceArr[1]) and (
                 infoList[i].find_all("td")[11].text == "none")
     ]
-    #print("1")
+    
 
+#Maps Inputted Answers w/ Asked 
 preference_keys = [
     "", "", "InsideShooting", "OutsideShooting", "Range", "Rebounding",
     "InsideDefense", "PerimeterDefense", "IQ", "Passing", "Handling", "Speed",
@@ -220,6 +230,7 @@ for player in playerLinks:
     folder_name = "PlayersHTML"  # Corrected folder name
 
     try:
+        #checks if Player is already in PlayersHTML folder
         html_content = load_html_from_file(os.path.join(
             folder_name, file_name))
         #print("Content loaded from file.")
@@ -232,6 +243,44 @@ for player in playerLinks:
         #print("Content fetched from URL and saved to file.")
 
     soup2 = BeautifulSoup(html_content, "html.parser")
+
+    #checks To see Development Difference
+    
+    table = soup2.find("table", class_="stats-table-medium_font")
+    positions = [(1, 35)]
+    schoolYearWantedInt = int(int(schoolYear[wantedYear]))
+    if schoolYearWantedInt == 2:
+        positions.append((2,35))
+    elif schoolYearWantedInt != 1:
+        positions.append((2,35))
+        positions.append((3, 35))
+    '''
+    elif schoolYearWantedInt == 4:
+        positions.append((4, 35))
+    '''
+    
+    siValues = []
+    rows = table.find_all('tr')
+
+    
+    try:
+        for row_idx, col_idx in positions:
+            cell = rows[row_idx].find_all('td')[col_idx]
+            siValues.append(int(cell.get_text(strip=True)))
+    except IndexError:
+        continue
+    
+    if schoolYearWantedInt == 2:
+        if (siValues[1] - siValues[0]) < developmentDiff:
+            continue
+    elif schoolYearWantedInt != 1:
+        if (siValues[2] - siValues[0]) < developmentDiff:
+            continue
+    
+
+
+
+
 
     #Finds the recuriting Eval
     try:
@@ -250,23 +299,7 @@ for player in playerLinks:
                 else:
                     playerEvalheight += i
     #Checks if player's height is above or equal to user's preference and if player's evaluation matches user's criteria.
-    '''
-    if heights.index(playerEvalheight) >= heights.index(preferenceArr[2]):
-        for key, values in resultDic.items():
-            good_values = [
-                value for qualifier, value in values if qualifier == "Good"
-            ]
-            bad_values = [
-                value for qualifier, value in values if qualifier == "Bad"
-            ]
-            if not any(good_value in recEval
-                       for good_value in good_values) and good_values != []:
-                break
-            elif any(bad_value in recEval for bad_value in bad_values):
-                break
-        else:
-            print(player)
-    '''
+
     try:
         # Attempt to find indices and compare heights
         playerEvalIndex = heights.index(playerEvalheight)
@@ -292,5 +325,9 @@ for player in playerLinks:
     except ValueError as e:
         # Handle the error and continue with the next iteration
         continue
+
+    
+
+
 
 print("DONE")

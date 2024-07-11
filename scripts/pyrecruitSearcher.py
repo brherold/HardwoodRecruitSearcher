@@ -105,6 +105,10 @@ Rebounding = {
     "Good": {"Can be a decent rebounder", "Can be a monster on the boards"},
     "Bad": {"Can never be a good rebounder"}
 }
+PlusDefense = {
+    "Good": {"Can be a good all-around defensive player", "Can be a great all-around defensive player"},
+    "Bad": {}
+}
 InsideDefense = {
     "Good": {"Will never be a good perimeter defender"},
     "Bad": {"Will never be a good interior defender",}
@@ -160,6 +164,7 @@ preferenceArr = [
     input("OutsideShooting: "),
     input("Range: "),
     input("Rebounding: "),
+    input("PlusDefense: "),
     input("InsideDefense: "),
     input("PerimeterDefense: "),
     input("IQ: "),
@@ -195,7 +200,7 @@ else:
 
 #Maps Inputted Answers w/ Asked 
 preference_keys = [
-    "", "", "InsideShooting", "OutsideShooting", "Range", "Rebounding",
+    "", "", "InsideShooting", "OutsideShooting", "Range", "Rebounding","PlusDefense",
     "InsideDefense", "PerimeterDefense", "IQ", "Passing", "Handling", "Speed",
     "FarHome"
 ]

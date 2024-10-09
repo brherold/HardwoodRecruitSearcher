@@ -8,6 +8,8 @@ import requests
 import hashlib
 import os
 
+import webbrowser
+
 
 def save_html_to_file(content, filename):
     with open(filename, 'wb') as file:
@@ -147,7 +149,7 @@ Speed = {
 FarHome = {"Good": {"Has no preference"}, "Bad": {}}
 ####
 
-recruited = input("Is Recruited?: (Y,N)")  # gets if player is recruited or not
+recruited = input("Is Recruited?: (Y,L,N)")  # gets if player is recruited or not
 
 
 #Asks for Deve Difference
@@ -185,7 +187,18 @@ if recruited == "Y":
         if (int(infoList[i].find_all("td")[7].text) >= preferenceArr[0]) and (
             int(infoList[i].find_all("td")[6].text) >= preferenceArr[1])
     ]
-    
+elif recruited == "L":
+    #Only "Low" interested Recruited players  & None
+    playerLinks = [
+        hardwoodBeginnerUrl +
+        infoList[i].find_all("td")[2].find("a").get("href")
+        for i in range(len(infoList))
+        if (int(infoList[i].find_all("td")[7].text) >= preferenceArr[0]) and (
+            int(infoList[i].find_all("td")[6].text) >= preferenceArr[1]) and (
+                not any(substring in infoList[i].find_all("td")[11].text for substring in ["High", "Medium", "Committed"])
+
+            )
+    ] 
 else:
     #Excludes Recruited Plauers
     playerLinks = [
@@ -223,7 +236,7 @@ for i in range(3, len(preferenceArr)):
                 ("Bad", item) for item in corresponding_dict["Bad"])
 
 #
-
+playersFound = [] #Array that holds players printed
 # In[ ]:
 
 #Searches and returns links of players who fit preferences
@@ -231,7 +244,6 @@ for player in playerLinks:
     #if player == playerLinks[-1]:
         #print("DONE")
     file_name = hashlib.md5(player.encode()).hexdigest() + ".html"
-
     folder_name = "PlayersHTML"  # Corrected folder name
 
     try:
@@ -250,37 +262,37 @@ for player in playerLinks:
     soup2 = BeautifulSoup(html_content, "html.parser")
 
     #checks To see Development Difference
-    
-    table = soup2.find("table", class_="stats-table-medium_font")
-    positions = [(1, 35)]
-    schoolYearWantedInt = int(int(schoolYear[wantedYear]))
-    if schoolYearWantedInt == 2:
-        positions.append((2,35))
-    elif schoolYearWantedInt != 1:
-        positions.append((2,35))
-        positions.append((3, 35))
-    '''
-    elif schoolYearWantedInt == 4:
-        positions.append((4, 35))
-    '''
-    
-    siValues = []
-    rows = table.find_all('tr')
+    if wantedYear not in ["INT","JCFR","JCSO"]:
+        table = soup2.find("table", class_="stats-table-medium_font")
+        positions = [(1, 35)]
+        schoolYearWantedInt = int(int(schoolYear[wantedYear]))
+        if schoolYearWantedInt == 2:
+            positions.append((2,35))
+        elif schoolYearWantedInt != 1:
+            positions.append((2,35))
+            positions.append((3, 35))
+        '''
+        elif schoolYearWantedInt == 4:
+            positions.append((4, 35))
+        '''
+        
+        siValues = []
+        rows = table.find_all('tr')
 
-    
-    try:
-        for row_idx, col_idx in positions:
-            cell = rows[row_idx].find_all('td')[col_idx]
-            siValues.append(int(cell.get_text(strip=True)))
-    except IndexError:
-        continue
-    
-    if schoolYearWantedInt == 2:
-        if (siValues[1] - siValues[0]) < developmentDiff:
+        
+        try:
+            for row_idx, col_idx in positions:
+                cell = rows[row_idx].find_all('td')[col_idx]
+                siValues.append(int(cell.get_text(strip=True)))
+        except IndexError:
             continue
-    elif schoolYearWantedInt != 1:
-        if (siValues[2] - siValues[0]) < developmentDiff:
-            continue
+        
+        if schoolYearWantedInt == 2:
+            if (siValues[1] - siValues[0]) < developmentDiff:
+                continue
+        elif schoolYearWantedInt != 1:
+            if (siValues[2] - siValues[0]) < developmentDiff:
+                continue
     
 
 
@@ -292,11 +304,13 @@ for player in playerLinks:
         recEval = soup2.find("table").find_all("tr")[15].text
     except AttributeError:
         continue
+    
+    
 
     playerEvalheight = ""
     for i in recEval:
         #Removes ALL players w/ poor defender eval
-        if "poor defender" not in recEval:
+        if "poor defender" not in recEval and "Isn't much of a student and may not qualify academically" not in recEval:
             if i.isdigit():
                 if len(playerEvalheight) == 0:
                     playerEvalheight += i
@@ -326,6 +340,9 @@ for player in playerLinks:
                     break
             else:
                 print(player)
+                playersFound.append(player)
+                
+                
 
     except ValueError as e:
         # Handle the error and continue with the next iteration
@@ -336,3 +353,9 @@ for player in playerLinks:
 
 
 print("DONE")
+
+if len(playersFound) != 0:
+    ans = input("Open Links? ")
+    if ans == "Y":
+        for pl in playersFound:
+            webbrowser.open(pl)

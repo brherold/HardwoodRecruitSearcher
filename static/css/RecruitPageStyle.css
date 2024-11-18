@@ -1,0 +1,99 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Header styling */
+h1 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Form container styling */
+form {
+    width: 80%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for each section (Recruit Year, Region, etc.) */
+h3 {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Input fields and select boxes */
+input[type="radio"], input[type="number"], select {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+/* Radio buttons and labels */
+input[type="radio"] {
+    margin-left: 10px;
+}
+
+label {
+    font-size: 0.9rem;
+    color: #555;
+    margin-right: 15px;
+}
+
+/* Select options */
+select {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+/* Submit button styling */
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+input[type="submit"]:active {
+    background-color: #003d80;
+}
+
+/* Form group for better spacing */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+/* Adjust for responsiveness on smaller screens */
+@media (max-width: 600px) {
+    form {
+        width: 90%;
+    }
+}

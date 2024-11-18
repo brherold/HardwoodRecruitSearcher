@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 import hashlib
 import os
-
+from heightconverter import convert_to_feet, convert_to_inches
 import webbrowser
 
 
@@ -200,7 +200,7 @@ elif recruited == "L":
             )
     ] 
 else:
-    #Excludes Recruited Plauers
+    #Excludes Recruited Players
     playerLinks = [
         hardwoodBeginnerUrl +
         infoList[i].find_all("td")[2].find("a").get("href")
@@ -308,39 +308,67 @@ for player in playerLinks:
     
 
     playerEvalheight = ""
-    for i in recEval:
-        #Removes ALL players w/ poor defender eval
-        if "poor defender" not in recEval and "Isn't much of a student and may not qualify academically" not in recEval:
-            if i.isdigit():
-                if len(playerEvalheight) == 0:
-                    playerEvalheight += i
-                    playerEvalheight += "'"
-                else:
-                    playerEvalheight += i
-    #Checks if player's height is above or equal to user's preference and if player's evaluation matches user's criteria.
+    
+    # Check the entire recEval string for unwanted phrases
+    if "poor defender" in recEval or "Isn't much of a student and may not qualify academically" in recEval:
+        continue  # Skip this player if they have the poor eval comment
 
+    # Proceed with the height extraction only if the unwanted phrases aren't present
+    for i in recEval:
+        if i.isdigit():
+            if len(playerEvalheight) == 0:
+                playerEvalheight += i
+                playerEvalheight += "'"
+            else:
+                playerEvalheight += i
+
+
+    #Checks if player's height is above or equal to user's preference and if player's evaluation matches user's criteria.
     try:
         # Attempt to find indices and compare heights
-        playerEvalIndex = heights.index(playerEvalheight)
-        preferenceIndex = heights.index(preferenceArr[2])
-        
-        if playerEvalIndex >= preferenceIndex:
-            
-            for key, values in resultDic.items():
-                good_values = [
-                    value for qualifier, value in values if qualifier == "Good"
-                ]
-                bad_values = [
-                    value for qualifier, value in values if qualifier == "Bad"
-                ]
-                if not any(good_value in recEval
-                        for good_value in good_values) and good_values != []:
-                    break
-                elif any(bad_value in recEval for bad_value in bad_values):
-                    break
-            else:
-                print(player)
-                playersFound.append(player)
+        if wantedYear not in ["INT","JCFR","JCSO"]:
+
+            ########################################## ADDING HEIGHT CHECKING USING FRESHMEN HEIGHTS #################################################
+            playerFreshmanHeight = convert_to_inches((rows[1].find_all('td')[33]).text)
+            wantedMinHeight = convert_to_inches(preferenceArr[2])
+
+            if playerFreshmanHeight + 8.5 >= wantedMinHeight:
+                for key, values in resultDic.items():
+                    good_values = [
+                        value for qualifier, value in values if qualifier == "Good"
+                    ]
+                    bad_values = [
+                        value for qualifier, value in values if qualifier == "Bad"
+                    ]
+                    if not any(good_value in recEval
+                            for good_value in good_values) and good_values != []:
+                        break
+                    elif any(bad_value in recEval for bad_value in bad_values):
+                        break
+                else:            
+                    print(player)
+                    playersFound.append(player)
+        else:
+
+            playerEvalIndex = heights.index(playerEvalheight)
+            preferenceIndex = heights.index(preferenceArr[2])
+
+            if playerEvalIndex >= preferenceIndex:
+                for key, values in resultDic.items():
+                    good_values = [
+                        value for qualifier, value in values if qualifier == "Good"
+                    ]
+                    bad_values = [
+                        value for qualifier, value in values if qualifier == "Bad"
+                    ]
+                    if not any(good_value in recEval
+                            for good_value in good_values) and good_values != []:
+                        break
+                    elif any(bad_value in recEval for bad_value in bad_values):
+                        break
+                else:            
+                    print(player)
+                    playersFound.append(player)
                 
                 
 

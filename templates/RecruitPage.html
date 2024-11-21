@@ -1,164 +1,190 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/RecruitPageStyle.css') }}">
-    </head>
-    <h1>Recruit Searcher</h1>
+  <head>
+    <link rel="stylesheet" href="static/css/RecruitPageStyle.css" />
+    <title>Recruit Page</title>
+  </head>
+  <body>
     <form action="/search" method="POST">
-        <h3>Recruit Year</h3>
-        <input type="radio" name="recruitYear" value="HSFR">
-        <label>HSFR</label>
-        <input type="radio" name="recruitYear" value="HSSO">
-        <label>HSSO</label>
-        <input type="radio" name="recruitYear" value="HSJR">
-        <label>HSJR</label>
-        <input type="radio" name="recruitYear" value="HSSR">
-        <label>HSSR</label>
-        <input type="radio" name="recruitYear" value="INT">
-        <label>INT</label>
-        <input type="radio" name="recruitYear" value="JCFR">
-        <label>JCFR</label>
-        <input type="radio" name="recruitYear" value="JCSO">
-        <label>JCSO</label>
-
-        <br>
-
-        <h3>Region</h3>
-        <input type="radio" name="region" value="All">
-        <label>All</label>
-        <input type="radio" name="region" value="NE">
-        <label>NE</label>
-        <input type="radio" name="region" value="MA">
-        <label>MA</label>
-        <input type="radio" name="region" value="MW">
-        <label>MW</label>
-        <input type="radio" name="region" value="WI">
-        <label>WI</label>
-
-        <br>
-
-        <h3>Is Recruited?</h3>
-        <input type="radio" name="isRecruited" value="Y">
-        <label>Yes</label>
-        <input type="radio" name="isRecruited" value="L">
-        <label>Low</label>
-        <input type="radio" name="isRecruited" value="N">
-        <label>No</label>
-
-        <br>
-        
-        <h3>Minimum Development</h3>
-        <input type="number" name="minDevelopment" min="0" max="50">
-
-        <h3>Minimum Potential</h3>
-        <input type="number" name="minPotential" min="1" max="17">
-
-        <h3>Minimum SI</h3>
-        <input type="number" name="minSI" min="1" max="160">
-
-        <h3>Minimum Projected Height</h3>
-        <select name="minHeight">
-            <option value="5'9">5'9</option>
-            <option value="5'10">5'10</option>
-            <option value="5'11">5'11</option>
-            <option value="6'0">6'0</option>
-            <option value="6'1">6'1</option>
-            <option value="6'2">6'2</option>
-            <option value="6'3">6'3</option>
-            <option value="6'4">6'4</option>
-            <option value="6'5">6'5</option>
-            <option value="6'6">6'6</option>
-            <option value="6'7">6'7</option>
-            <option value="6'8">6'8</option>
-            <option value="6'9">6'9</option>
-            <option value="6'10">6'10</option>
-            <option value="6'11">6'11</option>
-            <option value="7'0">7'0</option>
-        </select>
-
-        <h3>Inside Shooting</h3>
-        <select name="InsideShooting">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Outside Shooting</h3>
-        <select name="OutsideShooting">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Range</h3>
-        <select name="Range">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Rebounding</h3>
-        <select name="Rebounding">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Plus Defense</h3>
-        <select name="PlusDefense">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Inside Defense</h3>
-        <select name="InsideDefense">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Perimeter Defense</h3>
-        <select name="PerimeterDefense">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>IQ</h3>
-        <select name="IQ">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Passing</h3>
-        <select name="Passing">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Handling</h3>
-        <select name="Handling">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Speed</h3>
-        <select name="Speed">
-            <option value=""> </option>
-            <option value="N">N</option>
-            <option value="Y">Y</option>
-        </select>
-        
-        <h3>Far Home</h3>
-        <select name="FarHome">
-            <option value=""> </option>
-            <option value="Y">Y</option>
-        </select>
-
-        <br><br>
-        <input type="submit" value="Search">
+        <div class="container">
+        <h1>Recruit Searcher</h1>
+        <table class="stats-table">
+            <tr>
+                <td width="150">Recruit Year:</td>
+                <td width="">
+                    <select name="recruitYear">
+                        <option value="HSFR">HSFR</option>
+                        <option value="HSSO">HSSO</option>
+                        <option value="HSJR">HSJR</option>
+                        <option value="HSSR">HSSR</option>
+                        <option value="INT">INT</option>
+                        <option value="JUCOFR">JUCOFR</option>
+                        <option value="JUCOSO">JUCOSO</option>
+                    </select>
+                </td>
+                <td width="150">Region:</td>
+                <td width="150">
+                    <select name="region">
+                        <option value="All">All</option>
+                        <option value="NE">New England</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="MW">Midwest</option>
+                    </select>
+                </td>
+                <td >No Close to Home Preference:</td>
+                <td width="75">
+                    <select name="FarHome">
+                        <option value="">None</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </td>
+            </tr>
+            <tr></tr>
+            <tr>
+                <td width="150">Minimum Development:</td>
+                <td>
+                    <input type="number" name="minDevelopment" min="0" max="50">
+                </td>
+                <td width="150">Minimum Potential:</td>
+                <td>
+                    <input type="number" name="minPotential" min="1" max="17">
+                </td>
+                <td width="150">Minimum SI:</td> 
+                <td>
+                    <input type="number" name="minSI" min="1" max="160">
+                </td>
+            </tr>
+            <tr>
+                </td>
+                <td width="150">Inside Shooting:</td>
+                <td width="150">
+                    <select name="InsideShooting">
+                        <option value="">None</option>
+                        <option value="Y">Above Average+ Post Moves</option>
+                    </select>
+                </td>
+                <td >Outside Shooting:</td>
+                <td width="75">
+                    <select name="OutsideShooting">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">Above Average+ Shooter</option>
+                    </select>
+                </td>
+                <td width="150">Range:</td>
+                <td width="">
+                    <select name="Range">
+                        <option value="">None</option>
+                        <option value="Y">Really be a long-range shooter</option>
+                    </select>
+                </td>
+            </tr>
+                    <tr>
+                </td>
+                <td width="150">All Around Defender:</td>
+                <td width="150">
+                    <select name="PlusDefense">
+                        <option value="">None</option>
+                        <option value="Y">Yes</option>
+                    </select>
+                </td>
+                <td >Inside Defense:</td>
+                <td width="75">
+                    <select name="InsideDefense">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">Will never be a good perimeter defender</option>
+                    </select>
+                </td>
+                <td width="150">Perimeter Defense:</td>
+                <td width="">
+                    <select name="PerimeterDefense">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">"Will never be a good interior defender</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td width="150">Passing:</td>
+                <td width="150">
+                    <select name="Passing">
+                        <option value="">None</option>
+                        <option value="Y">Skilled Passer</option>
+                    </select>
+                </td>
+                <td >Handling:</td>
+                <td width="75">
+                    <select name="Handling">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">Decent+ Ball Handler</option>
+                    </select>
+                </td>
+                <td width="150">IQ:</td>
+                <td width="">
+                    <select name="IQ">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">Smart Player</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td width="150">Rebounding:</td>
+                <td width="150">
+                    <select name="Rebounding">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">Decent+ Rebounder</option>
+                    </select>
+                </td>
+                <td >Speed:</td>
+                <td width="75">
+                    <select name="Speed">
+                        <option value="">None</option>
+                        <option value="N">Neutral</option>
+                        <option value="Y">Speedy+ Player</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td width="150">Minimum Projected Height:</td>
+                <td width="">
+                    <select name="minHeight">
+                        <option value="5'9">5'9</option>
+                        <option value="5'10">5'10</option>
+                        <option value="5'11">5'11</option>
+                        <option value="6'0">6'0</option>
+                        <option value="6'1">6'1</option>
+                        <option value="6'2">6'2</option>
+                        <option value="6'3">6'3</option>
+                        <option value="6'4">6'4</option>
+                        <option value="6'5">6'5</option>
+                        <option value="6'6">6'6</option>
+                        <option value="6'7">6'7</option>
+                        <option value="6'8">6'8</option>
+                        <option value="6'9">6'9</option>
+                        <option value="6'10">6'10</option>
+                        <option value="6'11">6'11</option>
+                        <option value="7'0">7'0</option>
+                    </select>
+                
+                <td width="150">Being Recruited:</td>
+                <td width="">
+                    <select name="isRecruited">
+                        <option value="N">No</option>
+                        <option value="L">Low Interest Only</option>
+                        <option value="Y">Yes</option>
+                    </select>
+            </tr>
+        </table>
+        <button>Search</button>
+        </div>
     </form>
+  </body>
 </html>

@@ -370,3 +370,9 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
 
     return playersFound
 
+
+'''
+print(recruitSearchFunction("HSSO", "NE", "Y", 20, 12, 30, "5'9", 
+                 "", "", "", "", "", "", 
+                 "", "", "", "", "", ""))
+'''

@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 import hashlib
 import os
-from heightconverter import convert_to_feet, convert_to_inches
+from heightconverter import convert_to_feet, convert_to_inches, height_pred
 import webbrowser
 
 
@@ -318,9 +318,10 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
 
                 ########################################## ADDING HEIGHT CHECKING USING FRESHMEN HEIGHTS #################################################
                 playerFreshmanHeight = convert_to_inches((rows[1].find_all('td')[33]).text)
+                playerPredictedHeight = height_pred(playerFreshmanHeight)
                 wantedMinHeight = convert_to_inches(preferenceArr[2])
 
-                if playerFreshmanHeight + 8.5 >= wantedMinHeight:
+                if playerPredictedHeight >= wantedMinHeight - .5:
                     for key, values in resultDic.items():
                         good_values = [
                             value for qualifier, value in values if qualifier == "Good"

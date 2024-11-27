@@ -28,3 +28,23 @@ def convert_to_feet(height):
     inches = math.floor(height % 12)
     heightString = str(feet) + "'" + str(inches)
     return heightString
+
+#Perfectly predicts height using Freshman Height
+height_inc_dec = .1131
+def height_pred(fresh_height):
+  res = fresh_height + fresh_height * height_inc_dec
+  print(res)
+  res_string = str(res)
+
+  dec_values = res_string.split(".")[-1]
+  tenths = int(dec_values[0])
+
+  if tenths < 4:
+    return math.floor(res)  #Round down .00
+  if tenths >= 4 and tenths < 9:
+    if tenths < 8:
+      return round(res * 2) / 2 #rounds to .5
+    else:
+      return math.floor(res * 2) / 2 #rounds to .5
+  else:
+    return math.ceil(res)  # Round up 1.00

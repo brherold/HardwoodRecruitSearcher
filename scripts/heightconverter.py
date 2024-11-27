@@ -33,7 +33,7 @@ def convert_to_feet(height):
 height_inc_dec = .1131
 def height_pred(fresh_height):
   res = fresh_height + fresh_height * height_inc_dec
-  print(res)
+  #print(res)
   res_string = str(res)
 
   dec_values = res_string.split(".")[-1]

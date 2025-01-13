@@ -27,7 +27,9 @@ def search():
     developmentDiff = int(request.form.get('minDevelopment', 0))  
     min_potential = int(request.form.get('minPotential', 0))  
     min_si = int(request.form.get('minSI', 0))  
-    min_height = request.form.get('minHeight')  
+    min_height = request.form.get('minHeight')
+    min_wingspan = request.form.get('minWingspan')
+    min_vertical = request.form.get('minVertical')
     inside_shooting = request.form.get('InsideShooting')
     outside_shooting = request.form.get('OutsideShooting')
     rangeVal = request.form.get('Range')
@@ -43,11 +45,9 @@ def search():
 
 
     
-    playersFoundArr = recruitSearchFunction(
-        wantedYear, wantedRegion, recruited, developmentDiff, min_potential, min_si, min_height, 
-        inside_shooting, outside_shooting, rangeVal, rebounding, plus_defense, inside_defense, 
-        perimeter_defense, iq, passing, handling, speed, far_home
-    )
+    playersFoundArr = recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, min_potential, min_si, min_height, min_wingspan, min_vertical,
+                 inside_shooting, outside_shooting, rangeVal, rebounding, plus_defense, inside_defense, 
+                 perimeter_defense, iq, passing, handling, speed, far_home)
 
  
 

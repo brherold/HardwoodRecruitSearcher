@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 
-player = "http://onlinecollegebasketball.org/player/204420"
+player = "http://onlinecollegebasketball.org/player/214216"
 response = requests.get(player)
 
 html_content = response.content

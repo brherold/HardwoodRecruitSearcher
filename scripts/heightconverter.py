@@ -20,6 +20,17 @@ def convert_to_inches(height):
     else:
         return None
     return (feet * 12) + inches
+
+#For vertical
+def Vert_convert_to_inches(height):
+    inches_str = height.rstrip('"')  # Removing the inch symbol
+    if '½' in inches_str:
+        inches_str = inches_str.replace('½', '.5')
+    elif '¼' in inches_str:
+        inches_str = inches_str.replace('¼', '.25')
+    return float(inches_str)
+
+
 #Converts Float/Int inches to String feet and inches (remove any fractional inches)
 #83.0 -> 6'11"
 def convert_to_feet(height):
@@ -48,3 +59,4 @@ def height_pred(fresh_height):
       return math.floor(res * 2) / 2 #rounds to .5
   else:
     return math.ceil(res)  # Round up 1.00
+

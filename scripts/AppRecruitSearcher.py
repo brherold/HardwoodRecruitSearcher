@@ -7,7 +7,8 @@ from bs4 import BeautifulSoup
 import requests
 import hashlib
 import os
-from heightconverter import convert_to_feet, convert_to_inches, height_pred
+from heightconverter import convert_to_feet, convert_to_inches, height_pred, Vert_convert_to_inches
+from recuritMeasurablePredictor import vertical_pred, vertical_pred_nonFresh, height_pred, wingspan_pred, wingspan_pred_nonFresh
 import webbrowser
 
 
@@ -21,7 +22,7 @@ def load_html_from_file(filename):
         return file.read()
 
 
-def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, min_potential, min_si, min_height, 
+def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, min_potential, min_si, min_height, min_wingspan, min_vertical,
                  inside_shooting, outside_shooting, rangeVal, rebounding, plus_defense, inside_defense, 
                  perimeter_defense, iq, passing, handling, speed, far_home):
     
@@ -148,6 +149,8 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
         min_potential,
         min_si,
         min_height,
+        min_wingspan,
+        min_vertical,
         inside_shooting,
         outside_shooting,
         rangeVal,
@@ -199,18 +202,17 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
 
     #Maps Inputted Answers w/ Asked 
     preference_keys = [
-        "", "", "InsideShooting", "OutsideShooting", "Range", "Rebounding","PlusDefense",
+        "", "", "", "", "", "InsideShooting", "OutsideShooting", "Range", "Rebounding","PlusDefense",
         "InsideDefense", "PerimeterDefense", "IQ", "Passing", "Handling", "Speed",
         "FarHome"
     ]
 
     resultDic = {}
 
-    for i in range(3, len(preferenceArr)):
+    for i in range(5, len(preferenceArr)):
         
         user_input = preferenceArr[i]
-        preference_key = preference_keys[
-            i - 1]  # Adjust index to match preference_keys
+        preference_key = preference_keys[i]  # Adjust index to match preference_keys
         
         if preference_key and preference_key in locals(
         ) and preference_key != "":  # Exclude empty keys
@@ -247,6 +249,7 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
             #print("Content fetched from URL and saved to file.")
 
         soup2 = BeautifulSoup(html_content, "html.parser")
+        
 
         #checks To see Development Difference
         if wantedYear not in ["INT","JCFR","JCSO"]:
@@ -258,10 +261,7 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
             elif schoolYearWantedInt != 1:
                 positions.append((2,35))
                 positions.append((3, 35))
-            '''
-            elif schoolYearWantedInt == 4:
-                positions.append((4, 35))
-            '''
+
             
             siValues = []
             rows = table.find_all('tr')
@@ -281,9 +281,42 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
                 if (siValues[2] - siValues[0]) < developmentDiff:
                     continue
         
+    ###############################################################################################################    
+        #For Vert and Wingspan Searching            
 
 
+        if wantedYear not in ["INT","JCFR","JCSO"]:
+            table = soup2.find("table", class_="stats-table-medium_font")
+            schoolYearWantedInt = int(int(schoolYear[wantedYear]))
 
+            if schoolYearWantedInt == 1:
+                positions = [(1, 33)]
+            else:
+                positions = [(1, 33), (schoolYearWantedInt, 33)]
+            height_values = []
+            rows = table.find_all('tr')
+            for row_idx, col_idx in positions:
+                cell = rows[row_idx].find_all('td')[col_idx]
+
+                height_values.append(float(convert_to_inches(cell.get_text(strip=True)))) #for finding height (have to convert to inches)
+            
+            fresh_height = height_values[0]
+            curr_height = height_values[-1]
+
+            str_vert = soup2.find("table").find_all("tr")[9].find("td").text.split("  ")[-1]
+            str_wingspan = soup2.find("table").find_all("tr")[8].find("td").text.split("  ")[-1]
+            
+            curr_vert = Vert_convert_to_inches(str_vert)
+            curr_wingspan = convert_to_inches(str_wingspan)
+
+            pred_vert = vertical_pred_nonFresh(fresh_height,curr_height,curr_vert)
+            pred_wingspan = wingspan_pred_nonFresh(fresh_height,curr_height,curr_wingspan)
+
+            #Convert asked measureables to inches 
+            wanted_wingspan = convert_to_inches(preferenceArr[3])
+            wanted_vert = Vert_convert_to_inches(preferenceArr[4])
+
+    ###############################################################################################################    
 
 
         #Finds the recuriting Eval
@@ -321,7 +354,7 @@ def recruitSearchFunction(wantedYear, wantedRegion, recruited, developmentDiff, 
                 playerPredictedHeight = height_pred(playerFreshmanHeight)
                 wantedMinHeight = convert_to_inches(preferenceArr[2])
 
-                if playerPredictedHeight >= wantedMinHeight - .5:
+                if (playerPredictedHeight >= wantedMinHeight - .5) and  (pred_wingspan + 2 > wanted_wingspan) and (pred_vert + 2 > wanted_vert):
                     for key, values in resultDic.items():
                         good_values = [
                             value for qualifier, value in values if qualifier == "Good"
